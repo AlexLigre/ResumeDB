@@ -9,9 +9,7 @@ public class ArrayStorage {
     private int numElements = 0;
 
     void clear() {
-        for (int i = 0; i < numElements; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, null);
         numElements = 0;
     }
 
@@ -28,58 +26,36 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        Resume r = new Resume();
-
         if (findIndex(uuid) >= 0) {
             for (int i = 0; i < numElements; i++) {
                 if (storage[i].uuid.equals(uuid)) {
-                    r = storage[i];
-                    break;
+                    return storage[i];
                 }
             }
-        }//else System.out.println("ERROR: Resume doesn't exist");
-        //return null;
-        else {
-            r.uuid = "ERROR: Resume doesn't exist";
         }
-        return r;
+        return null;
     }
 
     void update(Resume r) {
-        if (get(r.uuid) == null) {
+        int indexOfResume = findIndex(r.uuid);
+        if (indexOfResume < 0) {
             System.out.println("ERROR: Resume doesn't exist");
             return;
-        }
-        int indexOfResume = findIndex(r.uuid);
-        storage[indexOfResume] = r;
-
-    }
-
-    private int findIndex(String uuid) {
-        int result = -1;
-        for (int i = 0; i < numElements; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                result = i;
-                break;
-            }
-        }
-        return result;
+        } else storage[indexOfResume] = r;
     }
 
     void delete(String uuid) {
-        if (findIndex(uuid) < 0) {
+        int indexOfResume = findIndex(uuid);
+        if (indexOfResume < 0) {
             System.out.println("ERROR: Resume doesn't exist");
             return;
+        } else if (indexOfResume == numElements - 1) {
+            storage[indexOfResume] = null;
+            numElements--;
+        } else {
+            storage[indexOfResume] = storage[numElements - 1];
+            numElements--;
         }
-        for (int i = 0; i < numElements; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                System.arraycopy(storage, (i + 1), storage, i, numElements - (i + 1));
-                numElements--;
-                break;
-            }
-
-        }
-
     }
 
     /**
@@ -91,5 +67,16 @@ public class ArrayStorage {
 
     int size() {
         return numElements;
+    }
+
+    private int findIndex(String uuid) {
+        int result = -1;
+        for (int i = 0; i < numElements; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 }
