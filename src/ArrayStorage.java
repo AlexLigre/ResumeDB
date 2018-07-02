@@ -9,7 +9,7 @@ public class ArrayStorage {
     private int numElements = 0;
 
     void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, numElements, null);
         numElements = 0;
     }
 
@@ -26,12 +26,9 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        if (findIndex(uuid) >= 0) {
-            for (int i = 0; i < numElements; i++) {
-                if (storage[i].uuid.equals(uuid)) {
-                    return storage[i];
-                }
-            }
+        int indexOfResume = findIndex(uuid);
+        if (indexOfResume >= 0) {
+            return storage[indexOfResume];
         }
         return null;
     }
@@ -50,10 +47,11 @@ public class ArrayStorage {
             System.out.println("ERROR: Resume doesn't exist");
             return;
         } else if (indexOfResume == numElements - 1) {
-            storage[indexOfResume] = null;
+            storage[numElements - 1] = null;
             numElements--;
         } else {
             storage[indexOfResume] = storage[numElements - 1];
+            storage[numElements - 1] = null;
             numElements--;
         }
     }
