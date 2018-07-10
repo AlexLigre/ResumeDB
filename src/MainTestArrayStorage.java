@@ -1,11 +1,13 @@
 import model.Resume;
 import storage.ArrayStorage;
+import storage.SortedArrayStorage;
 
 /**
  * Test for storage.ArrayStorage
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    //static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static final SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -39,6 +41,6 @@ public class MainTestArrayStorage {
             for (Resume r : ARRAY_STORAGE.getAll()) {
                 System.out.println(r);
             }
-        }else System.out.println("\nStorage is empty");
+        } else System.out.println("\nStorage is empty");
     }
 }
