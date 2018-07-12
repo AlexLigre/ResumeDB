@@ -13,40 +13,19 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void save(Resume r) {
-        int index = Arrays.binarySearch(storage, 0, numElements, r);
-        if (numElements == storage.length) {
-            System.out.println("ERROR: Storage is full");
-            return;
-        }
-
-        if (index >= 0 & index < numElements) {
-            System.out.println("ERROR: Resume is already exists");
-            return;
-        }
-
+    protected void addToStorage(Resume r, int index) {
         index = -index - 1;
         if (index < numElements) {
-            for (int i = numElements - 1; i >= index; i--) {
-                storage[i + 1] = storage[i];
-            }
+            System.arraycopy(storage, index, storage, index + 1, numElements - index);
         }
         storage[index] = r;
         numElements++;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index < 0) {
-            System.out.println("ERROR: Resume doesn't exist");
-            return;
-        }
-
+    protected void deleteFromStorage(int index) {
         storage[index] = null;
-        for (int i = index; i < numElements; i++) {
-            storage[i] = storage[i + 1];
-        }
+        System.arraycopy(storage, index + 1, storage, index, numElements - index);
         storage[numElements - 1] = null;
         numElements--;
     }

@@ -19,28 +19,52 @@ public abstract class AbstractArrayStorage implements Storage {
         numElements = 0;
     }
 
+    public void save(Resume r) {
+        if (numElements == storage.length) {
+            System.out.println("ERROR: Storage is full");
+            return;
+        }
+
+        int index = findIndex(r.getUuid());
+        if (index >= 0) {
+            System.out.println("ERROR: Resume is already exists");
+            return;
+        }
+
+        addToStorage(r, index);
+    }
+
+    protected abstract void addToStorage(Resume r, int index);
+
     public Resume get(String uuid) {
-        int indexOfResume = findIndex(uuid);
-        if (indexOfResume >= 0) {
-            return storage[indexOfResume];
+        int index = findIndex(uuid);
+        if (index >= 0) {
+            return storage[index];
         }
         return null;
     }
 
-    public void update(Resume r) {
-        int indexOfResume = findIndex(r.getUuid());
-        if (indexOfResume < 0) {
-            System.out.println("ERROR: Resume doesn't exist");
-            return;
-        } else storage[indexOfResume] = r;
-    }
-
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     public Resume[] getAll() {
         return Arrays.copyOfRange(storage, 0, numElements);
     }
 
+    public void update(Resume r) {
+        int index = findIndex(r.getUuid());
+        if (index < 0) {
+            System.out.println("ERROR: Resume doesn't exist");
+        } else storage[index] = r;
+    }
+
+    public void delete(String uuid) {
+        int index = findIndex(uuid);
+        if (index < 0) {
+            System.out.println("ERROR: Resume doesn't exist");
+            return;
+        }
+
+        deleteFromStorage(index);
+    }
+
+    protected abstract void deleteFromStorage(int index);
     protected abstract int findIndex(String uuid);
 }
