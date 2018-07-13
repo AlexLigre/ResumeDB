@@ -9,14 +9,12 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void addToStorage(Resume r, int index) {
-        storage[numElements++] = r;
+        storage[numElements] = r;
     }
 
     @Override
     protected void deleteFromStorage(int index) {
         storage[index] = storage[numElements - 1];
-        storage[numElements - 1] = null;
-        numElements--;
     }
 
     @Override

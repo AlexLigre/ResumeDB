@@ -32,6 +32,7 @@ public abstract class AbstractArrayStorage implements Storage {
         }
 
         addToStorage(r, index);
+        numElements++;
     }
 
     protected abstract void addToStorage(Resume r, int index);
@@ -41,6 +42,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         }
+        System.out.print("ERROR: Resume doesn't exist  ");
         return null;
     }
 
@@ -63,6 +65,9 @@ public abstract class AbstractArrayStorage implements Storage {
         }
 
         deleteFromStorage(index);
+
+        storage[numElements - 1] = null;
+        numElements--;
     }
 
     protected abstract void deleteFromStorage(int index);
