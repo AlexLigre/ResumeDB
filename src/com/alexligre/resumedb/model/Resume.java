@@ -1,4 +1,4 @@
-package model;
+package com.alexligre.resumedb.model;
 
 import java.util.Objects;
 

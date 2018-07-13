@@ -1,6 +1,7 @@
-import model.Resume;
-import storage.ArrayStorage;
-import storage.SortedArrayStorage;
+package com.alexligre.resumedb;
+
+import com.alexligre.resumedb.model.Resume;
+import com.alexligre.resumedb.storage.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

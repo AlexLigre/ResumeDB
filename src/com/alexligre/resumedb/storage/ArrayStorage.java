@@ -1,6 +1,5 @@
-package storage;
-
-import model.Resume;
+package com.alexligre.resumedb.storage;
+import com.alexligre.resumedb.model.Resume;
 
 /**
  * Array based storage for Resumes

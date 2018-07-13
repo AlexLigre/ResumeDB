@@ -1,6 +1,6 @@
-package storage;
+package com.alexligre.resumedb.storage;
 
-import model.Resume;
+import com.alexligre.resumedb.model.Resume;
 
 public interface Storage {
     void clear();
