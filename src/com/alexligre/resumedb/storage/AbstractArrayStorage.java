@@ -60,10 +60,9 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
-
-        deleteFromStorage(index);
-
-        storage[numElements - 1] = null;
+        if (index == numElements - 1) {
+            storage[index] = null;
+        } else deleteFromStorage(index);
         numElements--;
     }
 
