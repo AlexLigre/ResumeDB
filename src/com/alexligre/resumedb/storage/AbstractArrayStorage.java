@@ -21,21 +21,19 @@ public abstract class AbstractArrayStorage implements Storage {
         numElements = 0;
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (numElements == storage.length) {
-            throw new StorageException("Storage is full", r.getUuid());
+            throw new StorageException("Storage is full", resume.getUuid());
         }
 
-        int index = findIndex(r.getUuid());
+        int index = findIndex(resume.getUuid());
         if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
+            throw new ExistStorageException(resume.getUuid());
         }
 
-        addToStorage(r, index);
+        addToStorage(resume, index);
         numElements++;
     }
-
-    protected abstract void addToStorage(Resume r, int index);
 
     public Resume get(String uuid) {
         int index = findIndex(uuid);
@@ -49,11 +47,12 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOfRange(storage, 0, numElements);
     }
 
-    public void update(Resume r) {
-        int index = findIndex(r.getUuid());
+    public void update(Resume resume) {
+        int index = findIndex(resume.getUuid());
         if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else storage[index] = r;
+            throw new NotExistStorageException(resume.getUuid());
+        }
+        storage[index] = resume;
     }
 
     public void delete(String uuid) {
@@ -67,6 +66,8 @@ public abstract class AbstractArrayStorage implements Storage {
         storage[numElements - 1] = null;
         numElements--;
     }
+
+    protected abstract void addToStorage(Resume resume, int index);
 
     protected abstract void deleteFromStorage(int index);
 
