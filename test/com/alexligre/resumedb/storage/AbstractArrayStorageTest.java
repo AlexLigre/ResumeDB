@@ -1,6 +1,8 @@
 package com.alexligre.resumedb.storage;
 
+import com.alexligre.resumedb.exception.ExistStorageException;
 import com.alexligre.resumedb.exception.NotExistStorageException;
+import com.alexligre.resumedb.exception.StorageException;
 import com.alexligre.resumedb.model.Resume;
 import org.junit.Test;
 
@@ -57,5 +59,13 @@ public abstract class AbstractArrayStorageTest {
         ARRAY_STORAGE.get("id#3");
     }
 
+    @Test(expected = StorageException.class)
+    public void overFlow() {
+        ARRAY_STORAGE.save(new Resume("id#" + ARRAY_STORAGE.size()));
+    }
 
+    @Test(expected = ExistStorageException.class)
+    public void alreadyExists(){
+        ARRAY_STORAGE.save(new Resume("id#" + (ARRAY_STORAGE.size()-1)));
+    }
 }
