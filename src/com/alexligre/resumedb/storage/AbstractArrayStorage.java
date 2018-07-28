@@ -49,21 +49,23 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void update(Resume resume) {
         int index = findIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
+        if (index > -1) {
+            storage[index] = resume;
+            return;
         }
-        storage[index] = resume;
+        throw new NotExistStorageException(resume.getUuid());
     }
 
     public void delete(String uuid) {
         int index = findIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
+        if (index >-1) {
+            deleteFromStorage(index);
+            storage[numElements - 1] = null;
+            numElements--;
+            return;
         }
-        if (index == numElements - 1) {
-            storage[index] = null;
-        } else deleteFromStorage(index);
-        numElements--;
+        throw new NotExistStorageException(uuid);
+
     }
 
     protected abstract void addToStorage(Resume resume, int index);
