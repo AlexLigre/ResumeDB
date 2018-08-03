@@ -8,7 +8,7 @@ import com.alexligre.resumedb.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected final static int STORAGE_LIMIT = 6;
+    protected final static int STORAGE_LIMIT = 4;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int numElements = 0;
 
@@ -58,7 +58,7 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void delete(String uuid) {
         int index = findIndex(uuid);
-        if (index >-1) {
+        if (index > -1) {
             deleteFromStorage(index);
             storage[numElements - 1] = null;
             numElements--;
