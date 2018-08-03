@@ -7,6 +7,7 @@ import com.alexligre.resumedb.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.alexligre.resumedb.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.*;
 
 public abstract class AbstractArrayStorageTest {
@@ -48,18 +49,19 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExistStorageException() {
-        storage.save(resume_4);
-        storage.save(resume_4);
+        storage.save(resume_3);
     }
 
     @Test(expected = StorageException.class)
     public void saveStorageException() {
-        storage.clear();
-        for (int i = 0; i < 10_000; i++) {
-            storage.save(new Resume());
+        try {
+            for (int i = storage.size(); i < STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+        } catch (Exception e) {
+           fail("Test was failed");
         }
         storage.save(new Resume());
-        fail("Test was failed");
     }
 
     @Test
