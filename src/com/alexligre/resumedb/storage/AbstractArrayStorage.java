@@ -8,7 +8,7 @@ import com.alexligre.resumedb.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected final static int STORAGE_LIMIT = 10;
+    protected final static int STORAGE_LIMIT = 6;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int numElements = 0;
 
@@ -22,13 +22,13 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        if (numElements == storage.length) {
-            throw new StorageException("Storage is full", resume.getUuid());
-        }
-
         int index = findIndex(resume.getUuid());
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
+        }
+
+        if (numElements == storage.length) {
+            throw new StorageException("Storage is full", resume.getUuid());
         }
 
         addToStorage(resume, index);
