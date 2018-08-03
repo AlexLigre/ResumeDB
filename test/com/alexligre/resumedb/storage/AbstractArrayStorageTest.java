@@ -17,8 +17,6 @@ public abstract class AbstractArrayStorageTest {
     Resume resume_3 = new Resume("id#3");
     Resume resume_4 = new Resume("id#4");
     Resume resume_5 = new Resume("id#5");
-    Resume resume_6 = new Resume("id#6");
-    Resume resume_0 = new Resume("id#0");
 
     public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -30,13 +28,11 @@ public abstract class AbstractArrayStorageTest {
         storage.save(resume_1);
         storage.save(resume_2);
         storage.save(resume_3);
-        storage.save(resume_4);
-        storage.save(resume_5);
     }
 
     @Test
     public void size() {
-        assertEquals(5, storage.size());
+        assertEquals(3, storage.size());
     }
 
     @Test()
@@ -47,45 +43,75 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void save() {
-        storage.save(resume_6);
-        assertEquals(resume_6, storage.get("id#6"));
+        storage.save(resume_4);
+        assertEquals(resume_4, storage.get("id#4"));
         try {
-            storage.save(resume_6);
-            fail("Resume id#6 saved twice");
-        } catch (ExistStorageException e) {
-            assertEquals("Resume id#6 already exists", e.getMessage());
-        }
-        try {
-            storage.save(resume_0);
-            fail("Resume id#0 saved");
+            storage.save(resume_5);
+            fail("Resume id#5 saved");
         } catch (StorageException e) {
             assertEquals("Storage is full", e.getMessage());
         }
     }
 
-    @Test(expected = NotExistStorageException.class)
-    public void get() {
-        assertEquals(resume_5, storage.get("id#5"));
-        storage.clear();
-        assertEquals(resume_5, storage.get("id#5"));
+    @Test
+    public void saveExistStorageException() {
+        storage.save(resume_4);
+        try {
+            storage.save(resume_4);
+            fail("Resume id#4 saved twice");
+        } catch (ExistStorageException e) {
+            assertEquals("Resume id#4 already exists", e.getMessage());
+        }
+    }
 
+    @Test
+    public void saveStorageException() {
+        storage.save(resume_4);
+        try {
+            storage.save(resume_5);
+            fail("Resume id#5 saved");
+        } catch (StorageException e) {
+            assertEquals("Storage is full", e.getMessage());
+        }
+    }
+
+    @Test
+    public void get() {
+        assertEquals(resume_3, storage.get("id#3"));
     }
 
     @Test(expected = NotExistStorageException.class)
+    public void getNotExistStorageException() {
+        storage.clear();
+        assertEquals(resume_3, storage.get("id#3"));
+    }
+
+    @Test
     public void delete() {
         storage.delete("id#3");
-        storage.get("id#3");
+        Resume[] excpectedArray = {resume_1, resume_2};
+        assertArrayEquals(excpectedArray, storage.getAll());
+    }
+
+    @Test(expected = NotExistStorageException.class)
+    public void deleteNotExistStorageException() {
+        storage.delete("id#4");
     }
 
     @Test
     public void getAll() {
-        Resume[] rArr = {resume_1, resume_2, resume_3, resume_4, resume_5};
-        assertArrayEquals(rArr, storage.getAll());
+        Resume[] excpectedArray = {resume_1, resume_2, resume_3};
+        assertArrayEquals(excpectedArray, storage.getAll());
+    }
+
+    @Test
+    public void update() {
+        storage.update(resume_3);
+        assertEquals(resume_3, storage.get("id#3"));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void update() {
-        storage.update(resume_6);
-        assertEquals(resume_6, storage.get("id#6"));
+    public void updateNotExistStorageException() {
+        storage.update(resume_4);
     }
 }
