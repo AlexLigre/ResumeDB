@@ -16,7 +16,6 @@ public abstract class AbstractArrayStorageTest {
     Resume resume_2 = new Resume("id#2");
     Resume resume_3 = new Resume("id#3");
     Resume resume_4 = new Resume("id#4");
-    Resume resume_5 = new Resume("id#5");
 
     public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -45,34 +44,22 @@ public abstract class AbstractArrayStorageTest {
     public void save() {
         storage.save(resume_4);
         assertEquals(resume_4, storage.get("id#4"));
-        try {
-            storage.save(resume_5);
-            fail("Resume id#5 saved");
-        } catch (StorageException e) {
-            assertEquals("Storage is full", e.getMessage());
-        }
     }
 
-    @Test
+    @Test(expected = ExistStorageException.class)
     public void saveExistStorageException() {
         storage.save(resume_4);
-        try {
-            storage.save(resume_4);
-            fail("Resume id#4 saved twice");
-        } catch (ExistStorageException e) {
-            assertEquals("Resume id#4 already exists", e.getMessage());
-        }
+        storage.save(resume_4);
     }
 
-    @Test
+    @Test(expected = StorageException.class)
     public void saveStorageException() {
-        storage.save(resume_4);
-        try {
-            storage.save(resume_5);
-            fail("Resume id#5 saved");
-        } catch (StorageException e) {
-            assertEquals("Storage is full", e.getMessage());
+        storage.clear();
+        for (int i = 0; i < 10_000; i++) {
+            storage.save(new Resume());
         }
+        storage.save(new Resume());
+        fail("Test was failed");
     }
 
     @Test
@@ -82,8 +69,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExistStorageException() {
-        storage.clear();
-        assertEquals(resume_3, storage.get("id#3"));
+        assertEquals(resume_4, storage.get("id#4"));
     }
 
     @Test
