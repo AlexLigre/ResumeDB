@@ -5,67 +5,69 @@ import com.alexligre.resumedb.exception.NotExistStorageException;
 import com.alexligre.resumedb.exception.StorageException;
 import com.alexligre.resumedb.model.Resume;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
-    protected Resume[] storage = new Resume[STORAGE_LIMIT];
+public class MapStorage extends AbstractStorage {
+    Map<String, Resume> storage = new HashMap<>();
 
+    @Override
     public void clear() {
-        Arrays.fill(storage, 0, numElements, null);
+        storage.clear();
         numElements = 0;
     }
 
+    @Override
     public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index > -1) {
-            storage[index] = resume;
+        Resume result = findResume(resume.getUuid());
+        if (result != null) {
+            storage.put(resume.getUuid(), resume);
             return;
         }
         throw new NotExistStorageException(resume.getUuid());
     }
 
+    @Override
     public void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index >= 0) {
+        Resume result = findResume(resume.getUuid());
+        if (result != null) {
             throw new ExistStorageException(resume.getUuid());
         }
-
-        if (numElements == storage.length) {
+        if (numElements == STORAGE_LIMIT) {
             throw new StorageException("Storage is full", resume.getUuid());
         }
-
-        addToStorage(resume, index);
+        storage.put(resume.getUuid(), resume);
         numElements++;
     }
 
+    @Override
     public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index > -1) {
-            return storage[index];
+        Resume result = findResume(uuid);
+        if (result != null) {
+            return result;
         }
         throw new NotExistStorageException(uuid);
     }
 
+    @Override
     public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index > -1) {
-            deleteFromStorage(index);
-            storage[numElements - 1] = null;
+        Resume result = findResume(uuid);
+        if (result != null) {
+            storage.remove(uuid);
             numElements--;
             return;
         }
         throw new NotExistStorageException(uuid);
-
     }
 
+    @Override
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, numElements);
+        Resume[] result = new Resume[numElements];
+        storage.values().toArray(result);
+        return result;
     }
 
-    protected abstract void addToStorage(Resume resume, int index);
-
-    protected abstract void deleteFromStorage(int index);
-
-    protected abstract int findIndex(String uuid);
-
+    private Resume findResume(String uuid) {
+        return storage.get(uuid);
+    }
 }
