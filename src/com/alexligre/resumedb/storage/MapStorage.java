@@ -12,24 +12,8 @@ public class MapStorage extends AbstractStorage {
     Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    public void clear() {
-        storage.clear();
-        numElements = 0;
-    }
-
-    @Override
-    public void update(Resume resume) {
-        Resume result = findResume(resume.getUuid());
-        if (result != null) {
-            storage.put(resume.getUuid(), resume);
-            return;
-        }
-        throw new NotExistStorageException(resume.getUuid());
-    }
-
-    @Override
     public void save(Resume resume) {
-        Resume result = findResume(resume.getUuid());
+        Resume result = findResumeInMap(resume.getUuid());
         if (result != null) {
             throw new ExistStorageException(resume.getUuid());
         }
@@ -42,7 +26,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public Resume get(String uuid) {
-        Resume result = findResume(uuid);
+        Resume result = findResumeInMap(uuid);
         if (result != null) {
             return result;
         }
@@ -51,7 +35,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public void delete(String uuid) {
-        Resume result = findResume(uuid);
+        Resume result = findResumeInMap(uuid);
         if (result != null) {
             storage.remove(uuid);
             numElements--;
@@ -61,13 +45,48 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
+    protected Resume[] existsResumes() {
         Resume[] result = new Resume[numElements];
         storage.values().toArray(result);
         return result;
     }
 
-    private Resume findResume(String uuid) {
+    @Override
+    protected void clearStorage() {
+        storage.clear();
+    }
+
+    @Override
+    protected boolean updated(Resume resume) {
+        Resume result = findResumeInMap(resume.getUuid());
+        if (result != null) {
+            storage.put(resume.getUuid(), resume);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void addToStorage(Resume resume, int index) {
+        storage.put(resume.getUuid(), resume);
+    }
+
+    private Resume findResumeInMap(String uuid) {
         return storage.get(uuid);
+    }
+
+
+    @Override
+    protected void deleteFromStorage(int index) {
+    }
+
+    @Override
+    protected int findIndex(String uuid) {
+        return 0;
+    }
+
+    @Override
+    protected Resume getResume(int index) {
+        return null;
     }
 }
