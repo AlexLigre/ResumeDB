@@ -1,6 +1,5 @@
 package com.alexligre.resumedb.storage;
 
-import com.alexligre.resumedb.exception.NotExistStorageException;
 import com.alexligre.resumedb.model.Resume;
 
 import java.util.ArrayList;
@@ -10,45 +9,37 @@ public class ListStorage extends AbstractStorage {
     List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected Resume[] existsResumes() {
-        Resume[] result = new Resume[numElements];
-        storage.subList(0, numElements - 1).toArray(result);
-        return result;
+    public void clear() {
+
     }
 
     @Override
-    protected void deleteFromStorage(int index) {
-        storage.remove(index);
+    public void update(Resume resume) {
+
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage.get(index);
+    public void save(Resume resume) {
+
     }
 
     @Override
-    protected void clearStorage() {
-        storage.clear();
+    public Resume get(String uuid) {
+        return null;
     }
 
     @Override
-    protected boolean updated(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index > -1) {
-            storage.set(index, resume);
-            return true;
-        }
-        return false;
+    public void delete(String uuid) {
+
     }
 
     @Override
-    protected void addToStorage(Resume resume, int index) {
-        storage.add(resume);
+    public Resume[] getAll() {
+        return new Resume[0];
     }
 
     @Override
-    protected int findIndex(String uuid) {
-        Resume resume = new Resume(uuid);
-        return storage.indexOf(resume);
+    public int size() {
+        return 0;
     }
 }
