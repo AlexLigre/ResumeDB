@@ -1,7 +1,5 @@
 package com.alexligre.resumedb.storage;
 
-import com.alexligre.resumedb.exception.ExistStorageException;
-import com.alexligre.resumedb.exception.NotExistStorageException;
 import com.alexligre.resumedb.exception.StorageException;
 import com.alexligre.resumedb.model.Resume;
 
@@ -12,51 +10,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int nElements = 0;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
+    protected abstract void addToStorage(Resume resume, int index);
+
+    protected abstract void deleteFromStorage(int index);
+
+    protected abstract Integer getSearchKey(String uuid);
+
     public void clear() {
         Arrays.fill(storage, 0, nElements, null);
         nElements = 0;
-    }
-
-    public void update(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index > -1) {
-            storage[index] = resume;
-            return;
-        }
-        throw new NotExistStorageException(resume.getUuid());
-    }
-
-    public void save(Resume resume) {
-        int index = findIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-
-        if (nElements == storage.length) {
-            throw new StorageException("Storage is full", resume.getUuid());
-        }
-
-        addToStorage(resume, index);
-        nElements++;
-    }
-
-    public Resume get(String uuid) {
-        int index = findIndex(uuid);
-        if (index > -1) {
-            return storage[index];
-        }
-        throw new NotExistStorageException(uuid);
-    }
-
-    public void delete(String uuid) {
-        int index = findIndex(uuid);
-        if (index > -1) {
-            deleteFromStorage(index);
-            storage[nElements - 1] = null;
-            nElements--;
-            return;
-        }
-        throw new NotExistStorageException(uuid);
     }
 
     public Resume[] getAll() {
@@ -67,9 +29,34 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return nElements;
     }
 
-    protected abstract void deleteFromStorage(int index);
+    @Override
+    protected void doSave(Resume resume, Object index) {
+        if (nElements == storage.length) {
+            throw new StorageException("Storage is full", resume.getUuid());
+        }
+        addToStorage(resume, (Integer) index);
+        nElements++;
+    }
 
-    protected abstract void addToStorage(Resume resume, int index);
+    @Override
+    protected void doUpdate(Resume resume, Object index) {
+        storage[(Integer) index] = resume;
+    }
 
-    protected abstract int findIndex(String uuid);
+    @Override
+    protected void doDelete(Object index) {
+        deleteFromStorage((Integer) index);
+        storage[nElements - 1] = null;
+        nElements--;
+    }
+
+    @Override
+    protected Resume doGet(Object index) {
+        return storage[(Integer) index];
+    }
+
+    @Override
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
+    }
 }

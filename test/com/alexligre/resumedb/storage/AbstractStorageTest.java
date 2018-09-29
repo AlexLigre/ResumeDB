@@ -10,7 +10,7 @@ import org.junit.Test;
 import static com.alexligre.resumedb.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.*;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractStorageTest {
     Storage storage;
 
     Resume resume_1 = new Resume("id#1");
@@ -18,7 +18,7 @@ public abstract class AbstractArrayStorageTest {
     Resume resume_3 = new Resume("id#3");
     Resume resume_4 = new Resume("id#4");
 
-    public AbstractArrayStorageTest(Storage storage) {
+    public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
