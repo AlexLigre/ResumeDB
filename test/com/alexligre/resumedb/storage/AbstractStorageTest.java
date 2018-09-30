@@ -21,6 +21,14 @@ public abstract class AbstractStorageTest {
         this.storage = storage;
     }
 
+    @Before
+    public void initTest() {
+        storage.clear();
+        storage.save(resume_1);
+        storage.save(resume_2);
+        storage.save(resume_3);
+    }
+
     @Test()
     public void clear() {
         storage.clear();
@@ -53,14 +61,6 @@ public abstract class AbstractStorageTest {
     @Test(expected = NotExistStorageException.class)
     public void getNotExistStorageException() {
         assertEquals(resume_4, storage.get("id#4"));
-    }
-
-    @Before
-    public void initTest() {
-        storage.clear();
-        storage.save(resume_1);
-        storage.save(resume_2);
-        storage.save(resume_3);
     }
 
     @Test
