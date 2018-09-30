@@ -1,16 +1,13 @@
 package com.alexligre.resumedb.storage;
 
-import com.alexligre.resumedb.exception.ExistStorageException;
-import com.alexligre.resumedb.exception.NotExistStorageException;
 import com.alexligre.resumedb.exception.StorageException;
 import com.alexligre.resumedb.model.Resume;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.alexligre.resumedb.storage.AbstractArrayStorage.STORAGE_LIMIT;
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
-public abstract class AbstractArrayStorageTest {
+public abstract class AbstractArrayStorageTest extends AbstractStorageTest{
     Storage storage;
 
     Resume resume_1 = new Resume("id#1");
@@ -19,61 +16,11 @@ public abstract class AbstractArrayStorageTest {
     Resume resume_4 = new Resume("id#4");
 
     public AbstractArrayStorageTest(Storage storage) {
+        super(storage);
         this.storage = storage;
     }
 
-    @Before
-    public void initTest() {
-        storage.clear();
-        storage.save(resume_1);
-        storage.save(resume_2);
-        storage.save(resume_3);
-    }
 
-    @Test()
-    public void clear() {
-        storage.clear();
-        assertEquals(0, storage.size());
-    }
-
-    @Test
-    public void delete() {
-        storage.delete("id#3");
-        Resume[] expectedArray = {resume_1, resume_2};
-        assertArrayEquals(expectedArray, storage.getAll());
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void deleteNotExistStorageException() {
-        storage.delete("id#4");
-    }
-
-    @Test
-    public void get() {
-        assertEquals(resume_3, storage.get("id#3"));
-    }
-
-    @Test
-    public void getAll() {
-        Resume[] expectedArray = {resume_1, resume_2, resume_3};
-        assertArrayEquals(expectedArray, storage.getAll());
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void getNotExistStorageException() {
-        assertEquals(resume_4, storage.get("id#4"));
-    }
-
-    @Test
-    public void save() {
-        storage.save(resume_4);
-        assertEquals(resume_4, storage.get("id#4"));
-    }
-
-    @Test(expected = ExistStorageException.class)
-    public void saveExistStorageException() {
-        storage.save(resume_3);
-    }
 
     @Test(expected = StorageException.class)
     public void saveStorageException() {
@@ -87,19 +34,5 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume());
     }
 
-    @Test
-    public void size() {
-        assertEquals(3, storage.size());
-    }
 
-    @Test
-    public void update() {
-        storage.update(resume_3);
-        assertEquals(resume_3, storage.get("id#3"));
-    }
-
-    @Test(expected = NotExistStorageException.class)
-    public void updateNotExistStorageException() {
-        storage.update(resume_4);
-    }
 }
