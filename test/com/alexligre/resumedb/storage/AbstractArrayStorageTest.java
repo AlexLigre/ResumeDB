@@ -7,15 +7,13 @@ import org.junit.Test;
 import static com.alexligre.resumedb.storage.AbstractArrayStorage.STORAGE_LIMIT;
 import static org.junit.Assert.fail;
 
-public abstract class AbstractArrayStorageTest extends AbstractStorageTest{
+public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     Storage storage;
 
     public AbstractArrayStorageTest(Storage storage) {
         super(storage);
         this.storage = storage;
     }
-
-
 
     @Test(expected = StorageException.class)
     public void saveStorageException() {
@@ -28,6 +26,4 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest{
         }
         storage.save(new Resume());
     }
-
-
 }
