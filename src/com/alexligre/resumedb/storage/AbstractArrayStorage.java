@@ -22,7 +22,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+        return Arrays.copyOf(storage,size);
     }
 
     public int size() {
