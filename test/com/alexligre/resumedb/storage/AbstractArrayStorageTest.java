@@ -10,11 +10,6 @@ import static org.junit.Assert.fail;
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest{
     Storage storage;
 
-    Resume resume_1 = new Resume("id#1");
-    Resume resume_2 = new Resume("id#2");
-    Resume resume_3 = new Resume("id#3");
-    Resume resume_4 = new Resume("id#4");
-
     public AbstractArrayStorageTest(Storage storage) {
         super(storage);
         this.storage = storage;
