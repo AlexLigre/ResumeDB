@@ -2,14 +2,15 @@ package com.alexligre.resumedb.storage;
 
 import com.alexligre.resumedb.exception.ExistStorageException;
 import com.alexligre.resumedb.exception.NotExistStorageException;
+import com.alexligre.resumedb.exception.StorageException;
 import com.alexligre.resumedb.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static com.alexligre.resumedb.storage.AbstractArrayStorage.STORAGE_LIMIT;
+import static org.junit.Assert.*;
 
-public abstract class AbstractStorageTest {
+public abstract class AbstractArrayStorageTest {
     Storage storage;
 
     Resume resume_1 = new Resume("id#1");
@@ -17,7 +18,7 @@ public abstract class AbstractStorageTest {
     Resume resume_3 = new Resume("id#3");
     Resume resume_4 = new Resume("id#4");
 
-    public AbstractStorageTest(Storage storage) {
+    public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -72,6 +73,18 @@ public abstract class AbstractStorageTest {
     @Test(expected = ExistStorageException.class)
     public void saveExistStorageException() {
         storage.save(resume_3);
+    }
+
+    @Test(expected = StorageException.class)
+    public void saveStorageException() {
+        try {
+            for (int i = storage.size(); i < STORAGE_LIMIT; i++) {
+                storage.save(new Resume());
+            }
+        } catch (Exception e) {
+            fail("Test was failed");
+        }
+        storage.save(new Resume());
     }
 
     @Test
