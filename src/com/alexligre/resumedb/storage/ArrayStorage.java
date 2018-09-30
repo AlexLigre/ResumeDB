@@ -6,17 +6,17 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void addToStorage(Resume resume, int index) {
-        storage[nElements] = resume;
+        storage[size] = resume;
     }
 
     @Override
     protected void deleteFromStorage(int index) {
-        storage[index] = storage[nElements - 1];
+        storage[index] = storage[size - 1];
     }
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        for (int i = 0; i < nElements; i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }

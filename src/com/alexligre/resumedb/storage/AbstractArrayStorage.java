@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected final static int STORAGE_LIMIT = 10_000;
-    protected int nElements = 0;
+    protected int size = 0;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
     protected abstract void addToStorage(Resume resume, int index);
@@ -17,25 +17,25 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract Integer getSearchKey(String uuid);
 
     public void clear() {
-        Arrays.fill(storage, 0, nElements, null);
-        nElements = 0;
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, nElements);
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
     public int size() {
-        return nElements;
+        return size;
     }
 
     @Override
     protected void doSave(Resume resume, Object index) {
-        if (nElements == storage.length) {
+        if (size == storage.length) {
             throw new StorageException("Storage is full", resume.getUuid());
         }
         addToStorage(resume, (Integer) index);
-        nElements++;
+        size++;
     }
 
     @Override
@@ -46,8 +46,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void doDelete(Object index) {
         deleteFromStorage((Integer) index);
-        storage[nElements - 1] = null;
-        nElements--;
+        storage[size - 1] = null;
+        size--;
     }
 
     @Override
