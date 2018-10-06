@@ -6,9 +6,6 @@ import com.alexligre.resumedb.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +16,6 @@ public abstract class AbstractStorageTest {
     Resume resume_2 = new Resume("id#2");
     Resume resume_3 = new Resume("id#3");
     Resume resume_4 = new Resume("id#4");
-    Resume resume_5 = new Resume("id#5");
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;

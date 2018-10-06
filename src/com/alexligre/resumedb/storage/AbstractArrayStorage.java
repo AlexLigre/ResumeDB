@@ -12,8 +12,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected abstract void addToStorage(Resume resume, int index);
 
-    protected abstract void deleteFromStorage(int index);
-
     protected abstract Integer getSearchKey(String uuid);
 
     public void clear() {
@@ -54,5 +52,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object index) {
         return (Integer) index >= 0;
+    }
+
+    protected void deleteFromStorage(int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
     }
 }

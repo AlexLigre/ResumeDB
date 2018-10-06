@@ -9,7 +9,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return Arrays.asList(Arrays.copyOf(storage,size));
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
@@ -22,13 +22,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void deleteFromStorage(int index) {
-        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
-    }
-
-    @Override
-    protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
+    protected Integer getSearchKey(String fullname) {
+        Resume searchKey = new Resume(fullname);
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 }
