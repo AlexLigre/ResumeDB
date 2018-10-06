@@ -2,7 +2,9 @@ package com.alexligre.resumedb.storage;
 
 import com.alexligre.resumedb.model.Resume;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
@@ -14,8 +16,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        Resume[] resumes = storage.values().toArray(new Resume[0]);
+        Arrays.sort(resumes);
+        return Arrays.asList(resumes);
     }
 
     @Override

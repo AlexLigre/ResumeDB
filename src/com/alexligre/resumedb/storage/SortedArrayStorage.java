@@ -3,8 +3,14 @@ package com.alexligre.resumedb.storage;
 import com.alexligre.resumedb.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+
+    @Override
+    public List<Resume> getAllSorted() {
+        return Arrays.asList(Arrays.copyOf(storage,size));
+    }
 
     @Override
     protected void addToStorage(Resume resume, int index) {
